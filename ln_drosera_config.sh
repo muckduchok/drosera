@@ -4,6 +4,14 @@ if ! command -v curl &> /dev/null; then
 fi
 
 PRIVATE=$(cat drosera_private.txt)
+PUBLIC=$(cat drosera_public.txt)
+
+drosera dryrun
+echo "private_trap = true" >> drosera.toml
+sed -i 's/^whitelist = \[\]/whitelist = ["$PUBLIC"]/' drosera.toml
+
+export DROSERA_PRIVATE_KEY=$PRIVATE
+echo ofc | drosera apply
 
 curl -LO https://github.com/drosera-network/releases/releases/download/v1.16.2/drosera-operator-v1.16.2-x86_64-unknown-linux-gnu.tar.gz
 tar -xvf drosera-operator-v1.16.2-x86_64-unknown-linux-gnu.tar.gz
