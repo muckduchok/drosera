@@ -54,12 +54,6 @@ echo "🍞 Installing Bun..."
 curl -fsSL https://bun.sh/install | bash
 export PATH="$HOME/.bun/bin:$PATH"
 
-# === Load user secrets ===
-if [[ ! -f drosera_private.txt || ! -f drosera_email.txt || ! -f drosera_username.txt ]]; then
-  echo "❌ Missing one of: drosera_private.txt, drosera_email.txt, drosera_username.txt"
-  exit 1
-fi
-
 # === Setup Trap project ===
 echo "🧪 Setting up Trap project..."
 mkdir -p ~/my-drosera-trap
