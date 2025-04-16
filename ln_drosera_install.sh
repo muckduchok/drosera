@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+PRIVATE=$(cat drosera_private.txt)
+EMAIL=$(cat drosera_email.txt)
+USERNAME=$(cat drosera_username.txt)
+
 echo "🔧 Starting Drosera Node Installation..."
 
 # === Update system ===
@@ -23,7 +27,7 @@ sudo curl -LO https://github.com/drosera-network/releases/releases/download/v1.1
 sudo tar -xvf drosera-v1.16.2-x86_64-unknown-linux-gnu.tar.gz
 sudo chmod +x drosera
 sudo rm drosera-v1.16.2-x86_64-unknown-linux-gnu.tar.gz
-
+cd 
 # === Clear shell command cache ===
 hash -r
 
@@ -55,10 +59,6 @@ if [[ ! -f drosera_private.txt || ! -f drosera_email.txt || ! -f drosera_usernam
   echo "❌ Missing one of: drosera_private.txt, drosera_email.txt, drosera_username.txt"
   exit 1
 fi
-
-PRIVATE=$(cat drosera_private.txt)
-EMAIL=$(cat drosera_email.txt)
-USERNAME=$(cat drosera_username.txt)
 
 # === Setup Trap project ===
 echo "🧪 Setting up Trap project..."
