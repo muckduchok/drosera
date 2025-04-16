@@ -26,15 +26,28 @@ sudo apt update -y && sudo apt upgrade -y
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 sudo docker run hello-world || true
 
-# === Install Rust + Drosera CLI ===
-echo "Installing Rust..."
-curl https://sh.rustup.rs -sSf | sh -s -- -y
-source "$HOME/.cargo/env"
+# === Install Rust ===
+echo "Installing Rust (Cargo)..."
+if ! command -v cargo &> /dev/null; then
+  curl https://sh.rustup.rs -sSf | sh -s -- -y
+  source "$HOME/.cargo/env"
+fi
 export PATH="$HOME/.cargo/bin:$PATH"
 
-if ! command -v drosera &> /dev/null; then
-  echo "Installing Drosera CLI with cargo..."
-  cargo install drosera
+# === Ensure Drosera CLI is installed and recent enough ===
+echo "Checking Drosera CLI version..."
+REQUIRED_VERSION="1.16.2"
+INSTALLED_VERSION=$(drosera --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' || echo "0.0.0")
+
+version_ge() {
+  [ "$(printf '%s\n' "$1" "$2" | sort -V | head -n 1)" != "$1" ]
+}
+
+if ! command -v drosera &> /dev/null || ! version_ge "$INSTALLED_VERSION" "$REQUIRED_VERSION"; then
+  echo "Installing or upgrading Drosera CLI to version >= $REQUIRED_VERSION..."
+  cargo install drosera --force
+else
+  echo "✅ Drosera version $INSTALLED_VERSION meets requirement."
 fi
 
 # === Install Foundry ===
