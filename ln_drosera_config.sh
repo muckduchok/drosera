@@ -8,7 +8,7 @@ PUBLIC=$(cat drosera_public.txt)
 
 drosera dryrun
 echo "private_trap = true" >> drosera.toml
-sed -i 's/^whitelist = \[\]/whitelist = ["$PUBLIC"]/' drosera.toml
+sed -i "s/^whitelist = \[\]/whitelist = [\"$PUBLIC\"]/" drosera.toml
 
 export DROSERA_PRIVATE_KEY=$PRIVATE
 echo ofc | drosera apply
