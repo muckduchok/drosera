@@ -1,8 +1,3 @@
-if ! command -v curl &> /dev/null; then
-    sudo apt update -y
-    sudo apt install curl -y
-fi
-
 PRIVATE=$(cat drosera_private.txt)
 PUBLIC=$(cat drosera_public.txt)
 
