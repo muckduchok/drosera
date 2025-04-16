@@ -3,7 +3,6 @@ curl -L https://foundry.paradigm.xyz | bash && source /root/.bashrc && foundryup
 curl -fsSL https://bun.sh/install | bash
 
 PRIVATE=$(cat drosera_private.txt)
-PUBLIC=$(cat drosera_public.txt)
 EMAIL=$(cat drosera_email.txt)
 USERNAME=$(cat drosera_username.txt)
 
