@@ -1,71 +1,81 @@
 #!/bin/bash
-
 set -e
 
-echo "=== Installing Drosera CLI ==="
-curl -L https://app.drosera.io/install | bash
-export PATH="$HOME/.local/bin:$PATH"
+# === Update system ===
+echo "Updating packages..."
+sudo apt-get update && sudo apt-get upgrade -y
 
-# Check if Rust (cargo) is installed, install if missing
-if ! command -v cargo &> /dev/null; then
-  echo "Installing Rust toolchain..."
-  curl https://sh.rustup.rs -sSf | sh -s -- -y
-  source "$HOME/.cargo/env"
-  export PATH="$HOME/.cargo/bin:$PATH"
-else
-  echo "Rust is already installed."
-  export PATH="$HOME/.cargo/bin:$PATH"
-fi
+# === Install dependencies ===
+echo "Installing required packages..."
+sudo apt install curl ufw iptables build-essential git wget lz4 jq make gcc nano automake autoconf tmux htop nvme-cli libgbm1 pkg-config libssl-dev libleveldb-dev tar clang bsdmainutils ncdu unzip libleveldb-dev ca-certificates gnupg -y
 
-# Install Drosera CLI via cargo if not present
+# === Install Docker ===
+echo "Installing Docker..."
+for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove -y $pkg; done
+
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt update -y && sudo apt upgrade -y
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+sudo docker run hello-world || true
+
+# === Install Rust + Drosera CLI ===
+echo "Installing Rust..."
+curl https://sh.rustup.rs -sSf | sh -s -- -y
+source "$HOME/.cargo/env"
+export PATH="$HOME/.cargo/bin:$PATH"
+
 if ! command -v drosera &> /dev/null; then
-  echo "Installing Drosera CLI via cargo..."
+  echo "Installing Drosera CLI with cargo..."
   cargo install drosera
-else
-  echo "Drosera is already installed."
 fi
 
 # === Install Foundry ===
-echo "=== Installing Foundry ==="
+echo "Installing Foundry..."
 curl -L https://foundry.paradigm.xyz | bash
+source "$HOME/.bashrc"
 export PATH="$HOME/.foundry/bin:$PATH"
-~/.foundry/bin/foundryup
+foundryup
 
 # === Install Bun ===
-echo "=== Installing Bun ==="
+echo "Installing Bun..."
 curl -fsSL https://bun.sh/install | bash
 export PATH="$HOME/.bun/bin:$PATH"
 
-# === Load variables from files ===
-echo "=== Loading user data ==="
+# === Load user secrets ===
 if [[ ! -f drosera_private.txt || ! -f drosera_email.txt || ! -f drosera_username.txt ]]; then
-  echo "Missing one of the required files: drosera_private.txt, drosera_email.txt, drosera_username.txt"
+  echo "❌ Missing one of: drosera_private.txt, drosera_email.txt, drosera_username.txt"
   exit 1
 fi
 
-PRIVATE=$(< drosera_private.txt)
-EMAIL=$(< drosera_email.txt)
-USERNAME=$(< drosera_username.txt)
+PRIVATE=$(cat drosera_private.txt)
+EMAIL=$(cat drosera_email.txt)
+USERNAME=$(cat drosera_username.txt)
 
-# === Clone and configure the project ===
-echo "=== Setting up Drosera trap project ==="
-mkdir -p my-drosera-trap
-cd my-drosera-trap
+# === Setup project ===
+echo "Setting up Trap project..."
+mkdir -p ~/my-drosera-trap
+cd ~/my-drosera-trap
 
 git config --global user.email "$EMAIL"
 git config --global user.name "$USERNAME"
 
 ~/.foundry/bin/forge init -t drosera-network/trap-foundry-template
 
-# Install Bun deps
 ~/.bun/bin/bun install
-
-# Compile project
 ~/.foundry/bin/forge build
 
-# Run Drosera apply
+# === Apply Trap ===
+echo "Applying Trap..."
 export DROSERA_PRIVATE_KEY="$PRIVATE"
 echo ofc | drosera apply | tee drosera_ln.log | grep 'address:' > address_line.txt
 
-echo "✅ Done. Deployed address:"
+echo "✅ Trap successfully deployed! Address:"
 cat address_line.txt
