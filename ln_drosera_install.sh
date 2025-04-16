@@ -26,18 +26,15 @@ cd my-drosera-trap
 git config --global user.email "$EMAIL"
 git config --global user.name "$USERNAME"
 
-# Init Foundry project
+# Use full path to forge
 ~/.foundry/bin/forge init -t drosera-network/trap-foundry-template
 
-# Install Bun deps
+# Use full path to bun
 ~/.bun/bin/bun install
 
-# Build with Forge
+# Build with forge
 ~/.foundry/bin/forge build
 
-# Run Drosera apply
+# Run Drosera
 export DROSERA_PRIVATE_KEY="$PRIVATE"
 echo ofc | ~/.local/bin/drosera apply | tee drosera_ln.log | grep 'address:' > address_line.txt
-
-# Output address
-cat address_line.txt
