@@ -11,28 +11,31 @@ sudo apt-get update && sudo apt-get upgrade -y
 echo "📦 Installing required packages..."
 sudo apt install -y curl ufw iptables build-essential git wget lz4 jq make gcc nano automake autoconf tmux htop nvme-cli libgbm1 pkg-config libssl-dev libleveldb-dev tar clang bsdmainutils ncdu unzip libleveldb-dev ca-certificates gnupg
 
-# === Install Rust + Cargo if missing ===
+# === Remove old Drosera ===
+echo "🪜 Removing old drosera versions..."
+rm -f "$HOME/.cargo/bin/drosera"
+sudo rm -f /usr/local/bin/drosera
+
+# === Install Drosera v1.16.2 ===
+echo "📅 Installing Drosera v1.16.2..."
+cd /usr/local/bin
+sudo curl -LO https://github.com/drosera-network/releases/releases/download/v1.16.2/drosera-v1.16.2-x86_64-unknown-linux-gnu.tar.gz
+sudo tar -xvf drosera-v1.16.2-x86_64-unknown-linux-gnu.tar.gz
+sudo chmod +x drosera
+sudo rm drosera-v1.16.2-x86_64-unknown-linux-gnu.tar.gz
+
+# === Clear shell command cache ===
+hash -r
+
+# === Confirm version ===
+echo "✅ Drosera version installed:"
+drosera --version
+
+# === Install Rust (if missing, required for some tooling) ===
 echo "🦀 Installing Rust (Cargo)..."
 if ! command -v cargo &> /dev/null; then
   curl https://sh.rustup.rs -sSf | sh -s -- -y
   source "$HOME/.cargo/env"
-fi
-export PATH="$HOME/.cargo/bin:$PATH"
-
-# === Ensure Drosera CLI is installed and recent ===
-echo "🔍 Checking Drosera version..."
-REQUIRED_VERSION="1.16.2"
-INSTALLED_VERSION=$(drosera --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' || echo "0.0.0")
-
-version_ge() {
-  [ "$(printf '%s\n' "$1" "$2" | sort -V | head -n 1)" != "$1" ]
-}
-
-if ! command -v drosera &> /dev/null || ! version_ge "$INSTALLED_VERSION" "$REQUIRED_VERSION"; then
-  echo "📥 Installing or upgrading Drosera to >= $REQUIRED_VERSION..."
-  cargo install drosera --force
-else
-  echo "✅ Drosera version $INSTALLED_VERSION is up to date."
 fi
 
 # === Install Foundry ===
