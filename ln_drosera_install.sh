@@ -1,5 +1,5 @@
-droseraup
-foundryup
+$HOME/.drosera/bin/droseraup
+$HOME/.drosera/bin/foundryup
 
 mkdir my-drosera-trap
 cd my-drosera-trap
