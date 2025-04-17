@@ -11,10 +11,10 @@ PRIVATE=$(cat ../drosera_private.txt)
 git config --global user.email "$EMAIL"
 git config --global user.name  "$USERNAME"
 
-forge init -t drosera-network/trap-foundry-template
-bun install
-forge build
+$HOME/.foundry/bin/forge init -t drosera-network/trap-foundry-template
+HOME/.bun/bin/bun install
+HOME/.foundry/bin/forge build
 
 ### ─────────────────────── 5. Apply trap ────────────────────────
 export DROSERA_PRIVATE_KEY=$PRIVATE
-echo ofc | drosera apply | tee drosera_ln.log | grep 'address:' > address_line.txt
+echo ofc | HOME/.drosera/bin/drosera apply | tee drosera_ln.log | grep 'address:' > address_line.txt
