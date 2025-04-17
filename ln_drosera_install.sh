@@ -19,7 +19,7 @@ echo 'export PATH="$HOME/.bun/bin:$PATH"' >> ~/.bashrc
 PS1='$ ' source ~/.bashrc
 
 ### ─────────────────────── 4. Trap‑проект ───────────────────────
-mkdir -p my-drosera-trap
+mkdir my-drosera-trap
 cd my-drosera-trap
 
 # берём данные из файлов (или подставь свои значения сразу)
