@@ -3,20 +3,20 @@ set -euo pipefail
 
 ### ─────────────────────── 1. Drosera CLI ───────────────────────
 curl -L https://app.drosera.io/install | bash
-source ~/.bashrc          # чтобы drosera попал в PATH
+PS1='$ ' source ~/.bashrc         # чтобы drosera попал в PATH
 droseraup
 
 ### ─────────────────────── 2. Foundry (forge) ───────────────────
 curl -L https://foundry.paradigm.xyz | bash
 # гарантируем PATH
 echo 'export PATH="$HOME/.foundry/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
+PS1='$ ' source ~/.bashrc
 foundryup                 # скачивает forge/cast/anvil
 
 ### ─────────────────────── 3. Bun ───────────────────────────────
 curl -fsSL https://bun.sh/install | bash
 echo 'export PATH="$HOME/.bun/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
+PS1='$ ' source ~/.bashrc
 
 ### ─────────────────────── 4. Trap‑проект ───────────────────────
 mkdir -p my-drosera-trap
