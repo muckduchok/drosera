@@ -8,7 +8,6 @@ grep -q 'private_trap' drosera.toml || echo 'private_trap = true' >> drosera.tom
 sed -i "s/^whitelist = \[\]/whitelist = [\"$PUBLIC\"]/" drosera.toml
 export DROSERA_PRIVATE_KEY=$PRIVATE
 echo ofc | $HOME/.drosera/bin/drosera apply
-sed -i 's|^ethereum_rpc = "https://ethereum-holesky-rpc\.publicnode\.com"|ethereum_rpc = "https://holesky.drpc.org/"|' drosera.toml
 
 cd ..
 
