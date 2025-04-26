@@ -16,5 +16,4 @@ $HOME/.bun/bin/bun install
 $HOME/.foundry/bin/forge build
 ### ─────────────────────── 5. Apply trap ────────────────────────
 export DROSERA_PRIVATE_KEY=$PRIVATE
-sed -i 's|^ethereum_rpc = "https://ethereum-holesky-rpc\.publicnode\.com"|ethereum_rpc = "http://167.86.127.237:48545"|' drosera.toml
 echo ofc | $HOME/.drosera/bin/drosera apply | tee drosera_ln.log | grep 'address:' > address_line.txt
