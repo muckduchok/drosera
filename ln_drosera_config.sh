@@ -7,7 +7,7 @@ $HOME/.drosera/bin/drosera dryrun
 grep -q 'private_trap' drosera.toml || echo 'private_trap = true' >> drosera.toml
 sed -i "s/^whitelist = \[\]/whitelist = [\"$PUBLIC\"]/" drosera.toml
 export DROSERA_PRIVATE_KEY=$PRIVATE
-echo ofc | $HOME/.drosera/bin/drosera apply
+echo ofc | $HOME/.drosera/bin/drosera apply | tee drosera_ln.log | grep 'address:' > address_line.txt
 
 cd ..
 
