@@ -1,12 +1,17 @@
 PRIVATE=$(cat drosera_private.txt)
 PUBLIC=$(cat drosera_public.txt)
 
+curl -L https://app.drosera.io/install | bash
+source ~/.bashrc
+$HOME/.drosera/bin/droseraup
+
 cd my-drosera-trap
 
 $HOME/.drosera/bin/drosera dryrun
 grep -q 'private_trap' drosera.toml || echo 'private_trap = true' >> drosera.toml
 sed -i "s/^whitelist = \[\]/whitelist = [\"$PUBLIC\"]/" drosera.toml
 export DROSERA_PRIVATE_KEY=$PRIVATE
+sed -i 's|drosera_rpc = ".*"|drosera_rpc = "https://relay.testnet.drosera.io"|' drosera.toml
 echo ofc | $HOME/.drosera/bin/drosera apply | tee drosera_ln.log | grep 'address:' > address_line.txt
 
 cd ..
@@ -28,7 +33,7 @@ Restart=always
 RestartSec=15
 LimitNOFILE=65535
 ExecStart=$(which drosera-operator) node --db-file-path $HOME/.drosera.db --network-p2p-port 31313 --server-port 31314 \
-    --eth-rpc-url https://relayer.testnet.drosera.io/ \
+    --eth-rpc-url https://ethereum-holesky-rpc.publicnode.com \
     --eth-backup-rpc-url https://1rpc.io/holesky \
     --drosera-address 0xea08f7d533C2b9A62F40D5326214f39a8E3A32F8 \
     --eth-private-key $PRIVATE \
