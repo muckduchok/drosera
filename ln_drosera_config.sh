@@ -8,7 +8,8 @@ $HOME/.drosera/bin/droseraup
 cd my-drosera-trap
 
 $HOME/.drosera/bin/drosera dryrun
-grep -q 'private_trap' drosera.toml || echo 'private_trap = true' >> drosera.toml
+grep -Eq '^[[:space:]]*private_trap[[:space:]]*=' drosera.toml \
+  || echo 'private_trap = true' >> drosera.toml
 sed -i "s/^whitelist = \[\]/whitelist = [\"$PUBLIC\"]/" drosera.toml
 export DROSERA_PRIVATE_KEY=$PRIVATE
 sed -i 's|drosera_rpc = ".*"|drosera_rpc = "https://relay.testnet.drosera.io"|' drosera.toml
