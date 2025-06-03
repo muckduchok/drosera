@@ -17,6 +17,8 @@ echo ofc | $HOME/.drosera/bin/drosera apply | tee drosera_ln.log | grep 'address
 
 cd ..
 
+rm drosera-operator-v1.16.2-x86_64-unknown-linux-gnu.tar.gz
+rm /usr/bin/drosera-operator
 curl -LO https://github.com/drosera-network/releases/releases/download/v1.17.1/drosera-operator-v1.17.1-x86_64-unknown-linux-gnu.tar.gz
 tar -xvf drosera-operator-v1.17.1-x86_64-unknown-linux-gnu.tar.gz
 sudo cp drosera-operator /usr/bin
