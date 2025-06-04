@@ -18,7 +18,7 @@ $HOME/.foundry/bin/forge build
 
 if [ -n "${TRAP_ADDRESS:-}" ]; then
     grep -Eq '^[[:space:]]*address[[:space:]]*=' drosera.toml \
-        || echo "address = \"${TRAP_ADDRESS}\"" >> drosera.toml
+        || echo "address = \"$TRAP_ADDRESS\"" >> drosera.toml
 fi
 
 export DROSERA_PRIVATE_KEY=$PRIVATE
