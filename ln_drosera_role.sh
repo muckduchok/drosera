@@ -1,4 +1,5 @@
 PUBLIC=$(cat drosera_public.txt)
+PRIVATE=$(cat drosera_private.txt)
 DISCORD=$(cat drosera_discord.txt)
 
 sudo systemctl daemon-reload
@@ -44,6 +45,7 @@ sed -i 's|^response_function = "helloworld(string)"|response_function = "respond
 
 $HOME/.foundry/bin/forge build
 $HOME/.drosera/bin/drosera dryrun
+export DROSERA_PRIVATE_KEY=$PRIVATE
 echo ofc | $HOME/.drosera/bin/drosera apply
 
 source /root/.bashrc
