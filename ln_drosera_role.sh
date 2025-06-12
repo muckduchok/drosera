@@ -1,5 +1,8 @@
-PRIVATE=$(cat drosera_private.txt)
+PUBLIC=$(cat drosera_public.txt)
 DISCORD=$(cat drosera_discord.txt)
+
+sudo systemctl daemon-reload
+sudo systemctl stop drosera
 
 cd $HOME/my-drosera-trap
 
@@ -35,3 +38,17 @@ contract Trap is ITrap {
 }
 EOF
 
+sed -i 's|^path = "out/HelloWorldTrap\.sol/HelloWorldTrap\.json"|path = "out/Trap.sol/Trap.json"|' drosera.toml
+sed -i 's|^response_contract = "0xdA890040Af0533D98B9F5f8FE3537720ABf83B0C"|response_contract = "0x4608Afa7f277C8E0BE232232265850d1cDeB600E"|' drosera.toml
+sed -i 's|^response_function = "helloworld(string)"|response_function = "respondWithDiscordName(string)"|' drosera.toml
+
+$HOME/.foundry/bin/forge build
+$HOME/.drosera/bin/drosera dryrun
+echo ofc | $HOME/.drosera/bin/drosera apply
+
+source /root/.bashrc
+$HOME/.foundry/bin/cast call 0x4608Afa7f277C8E0BE232232265850d1cDeB600E "isResponder(address)(bool)" $PUBLIC --rpc-url https://ethereum-holesky-rpc.publicnode.com
+
+sudo systemctl daemon-reload
+sudo systemctl enable drosera
+sudo systemctl start drosera
