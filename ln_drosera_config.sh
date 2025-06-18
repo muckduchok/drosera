@@ -20,12 +20,17 @@ cd ..
 
 rm drosera-operator-v1.16.2-x86_64-unknown-linux-gnu.tar.gz
 rm drosera-operator-v1.17.1-x86_64-unknown-linux-gnu.tar.gz
+rm drosera-operator-v1.17.2-x86_64-unknown-linux-gnu.tar.gz
 rm /usr/bin/drosera-operator
-curl -LO https://github.com/drosera-network/releases/releases/download/v1.17.2/drosera-operator-v1.17.2-x86_64-unknown-linux-gnu.tar.gz
-tar -xvf drosera-operator-v1.17.2-x86_64-unknown-linux-gnu.tar.gz
+curl -LO https://github.com/drosera-network/releases/releases/download/v1.19.0/drosera-operator-v1.19.0-x86_64-unknown-linux-gnu.tar.gz
+tar -xvf drosera-operator-v1.19.0-x86_64-unknown-linux-gnu.tar.gz
 sudo cp drosera-operator /usr/bin
 docker pull ghcr.io/drosera-network/drosera-operator:latest
 drosera-operator register --eth-rpc-url https://ethereum-holesky-rpc.publicnode.com --eth-private-key $PRIVATE
+
+cd my-drosera-trap
+export DROSERA_PRIVATE_KEY=$PRIVATE
+echo ofc | $HOME/.drosera/bin/drosera apply | tee drosera_ln.log | grep 'address:' > address_line.txt
 
 sudo tee /etc/systemd/system/drosera.service > /dev/null <<EOF
 [Unit]
