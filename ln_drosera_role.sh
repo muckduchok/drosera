@@ -1,6 +1,7 @@
 PUBLIC=$(cat drosera_public.txt)
 PRIVATE=$(cat drosera_private.txt)
 DISCORD=$(cat drosera_discord.txt)
+RPC=$(cat drosera_rpc.txt)
 
 sudo systemctl daemon-reload
 sudo systemctl stop drosera
@@ -49,7 +50,15 @@ export DROSERA_PRIVATE_KEY=$PRIVATE
 echo ofc | $HOME/.drosera/bin/drosera apply
 
 source /root/.bashrc
-$HOME/.foundry/bin/cast call 0x4608Afa7f277C8E0BE232232265850d1cDeB600E "isResponder(address)(bool)" $PUBLIC --rpc-url https://ethereum-holesky-rpc.publicnode.com
+
+if [ -n "${RPC//[[:space:]]/}" ]; then
+    $HOME/.foundry/bin/cast call 0x4608Afa7f277C8E0BE232232265850d1cDeB600E "isResponder(address)(bool)" $PUBLIC --rpc-url $RPC
+    echo "→ RPC задан: $RPC"
+else
+  $HOME/.foundry/bin/cast call 0x4608Afa7f277C8E0BE232232265850d1cDeB600E "isResponder(address)(bool)" $PUBLIC --rpc-url https://ethereum-holesky-rpc.publicnode.com
+  echo "→ RPC не задан, файл был пустой"
+fi
+
 
 sudo systemctl daemon-reload
 sudo systemctl enable drosera
