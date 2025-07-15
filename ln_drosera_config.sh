@@ -1,5 +1,6 @@
 PRIVATE=$(cat drosera_private.txt)
 PUBLIC=$(cat drosera_public.txt)
+RPC=$(cat drosera_rpc2.txt)
 
 curl -L https://app.drosera.io/install | bash
 source ~/.bashrc
@@ -14,6 +15,13 @@ sed -i "s/^whitelist = \[\]/whitelist = [\"$PUBLIC\"]/" drosera.toml
 export DROSERA_PRIVATE_KEY=$PRIVATE
 sed -i 's|drosera_rpc = ".*"|drosera_rpc = "https://relay.testnet.drosera.io"|' drosera.toml
 grep -q '^drosera_team' $HOME/my-drosera-trap/drosera.toml || sed -i 's|^drosera_rpc.*|drosera_team = "https://relay.testnet.drosera.io/"|' $HOME/my-drosera-trap/drosera.toml
+
+if [ -n "${RPC//[[:space:]]/}" ]; then
+    sed -i "s#^ethereum_rpc = \".*\"#ethereum_rpc = \"${RPC}\"#" drosera.toml
+else
+  sed -i 's|ethereum_rpc = ".*"|ethereum_rpc = "https://ethereum-holesky-rpc.publicnode.com/"|' drosera.toml
+fi
+
 echo ofc | $HOME/.drosera/bin/drosera apply | tee drosera_ln.log | grep 'address:' > address_line.txt
 
 cd ..
