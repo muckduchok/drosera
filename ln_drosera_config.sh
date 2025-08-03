@@ -8,7 +8,9 @@ $HOME/.drosera/bin/droseraup
 
 cd my-drosera-trap
 
-echo darova - $RPC
+if [ "$RPC" = "{@custom_rpc2}" ]; then
+  RPC=""
+fi
 
 $HOME/.drosera/bin/drosera dryrun
 grep -Eq '^[[:space:]]*private_trap[[:space:]]*=' drosera.toml \
