@@ -8,6 +8,8 @@ $HOME/.drosera/bin/droseraup
 
 cd my-drosera-trap
 
+echo darova - $RPC
+
 $HOME/.drosera/bin/drosera dryrun
 grep -Eq '^[[:space:]]*private_trap[[:space:]]*=' drosera.toml \
   || echo 'private_trap = true' >> drosera.toml
