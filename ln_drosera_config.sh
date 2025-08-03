@@ -17,7 +17,7 @@ sed -i 's|drosera_rpc = ".*"|drosera_rpc = "https://relay.testnet.drosera.io"|' 
 grep -q '^drosera_team' $HOME/my-drosera-trap/drosera.toml || sed -i 's|^drosera_rpc.*|drosera_team = "https://relay.testnet.drosera.io/"|' $HOME/my-drosera-trap/drosera.toml
 
 if [ -n "${RPC//[[:space:]]/}" ]; then
-    sed -i "s#^ethereum_rpc = \".*\"#ethereum_rpc = \"${RPC}\"#" drosera.toml
+    sed -i "s#^ethereum_rpc = \".*\"#ethereum_rpc = \"$RPC\"#" drosera.toml
 else
   sed -i 's|ethereum_rpc = ".*"|ethereum_rpc = "https://ethereum-holesky-rpc.publicnode.com/"|' drosera.toml
 fi
