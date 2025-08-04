@@ -41,8 +41,8 @@ contract Trap is ITrap {
 EOF
 
 sed -i 's|^path = "out/HelloWorldTrap\.sol/HelloWorldTrap\.json"|path = "out/Trap.sol/Trap.json"|' drosera.toml
-sed -i 's|^response_contract = "0xdA890040Af0533D98B9F5f8FE3537720ABf83B0C"|response_contract = "0x4608Afa7f277C8E0BE232232265850d1cDeB600E"|' drosera.toml
-sed -i 's|^response_function = "helloworld(string)"|response_function = "respondWithDiscordName(string)"|' drosera.toml
+sed -i 's|^response_contract = ".*"|response_contract = "0x4608Afa7f277C8E0BE232232265850d1cDeB600E"|' drosera.toml
+sed -i 's|^response_function = ".*"|response_function = "respondWithDiscordName(string)"|' drosera.toml
 
 $HOME/.foundry/bin/forge build
 $HOME/.drosera/bin/drosera dryrun
