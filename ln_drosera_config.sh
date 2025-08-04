@@ -21,7 +21,7 @@ export DROSERA_PRIVATE_KEY=$PRIVATE
 sed -i 's|drosera_rpc = ".*"|drosera_rpc = "https://relay.testnet.drosera.io"|' drosera.toml
 sed -i 's|eth_chain_id = .*|eth_chain_id = 17000|' drosera.toml
 sed -i 's|drosera_address = ".*"|drosera_address = "0xea08f7d533C2b9A62F40D5326214f39a8E3A32F8"|' drosera.toml
-sed -i 's|response_contract = ".*"|drosera_address = "0xdA890040Af0533D98B9F5f8FE3537720ABf83B0C"|' drosera.toml
+sed -i 's|response_contract = ".*"|response_contract = "0xdA890040Af0533D98B9F5f8FE3537720ABf83B0C"|' drosera.toml
 grep -q '^drosera_team' $HOME/my-drosera-trap/drosera.toml || sed -i 's|^drosera_rpc.*|drosera_team = "https://relay.testnet.drosera.io/"|' $HOME/my-drosera-trap/drosera.toml
 
 if [ -n "${RPC//[[:space:]]/}" ]; then
