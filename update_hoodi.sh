@@ -95,6 +95,10 @@ ExecStart=$(which drosera-operator) node --db-file-path $HOME/.drosera.db --netw
 WantedBy=multi-user.target
 EOF
 
+if grep -q '^address *= ' drosera.toml; then
+  grep '^address *= ' drosera.toml > address_line.txt
+fi
+
 sudo systemctl daemon-reload
 sudo systemctl enable drosera
 sudo systemctl start drosera
