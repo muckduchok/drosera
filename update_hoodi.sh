@@ -1,7 +1,7 @@
 PRIVATE=$(cat drosera_private.txt)
 PUBLIC=$(cat drosera_public.txt)
 RPC=$(cat drosera_rpc2.txt)
-TRAP_ADDRESS=$(cat trap_address_update.txt)
+# TRAP_ADDRESS=$(cat trap_address_update.txt)
 
 curl -L https://app.drosera.io/install | bash
 source ~/.bashrc
@@ -14,9 +14,9 @@ if [ "$RPC" = "{@custom_rpc2}" ]; then
   RPC=""
 fi
 
-if [ "$TRAP_ADDRESS" = "{@trap_address_update}" ]; then
-  TRAP_ADDRESS=""
-fi
+# if [ "$TRAP_ADDRESS" = "{@trap_address_update}" ]; then
+#   TRAP_ADDRESS=""
+# fi
 
 $HOME/.drosera/bin/drosera dryrun
 
@@ -24,11 +24,11 @@ if grep -q '^eth_chain_id *= *17000' drosera.toml; then
   sed -i '/^address *= *".*"/d' drosera.toml
 fi
 
-if [ -n "${TRAP_ADDRESS//[[:space:]]/}" ]; then
-    grep -Eq '^[[:space:]]*address[[:space:]]*=' drosera.toml \
-  || echo "address = \"$TRAP_ADDRESS\"" >> drosera.toml
-    sed -i "s#^address = \".*\"#address = \"$TRAP_ADDRESS\"#" drosera.toml
-fi
+# if [ -n "${TRAP_ADDRESS//[[:space:]]/}" ]; then
+#     grep -Eq '^[[:space:]]*address[[:space:]]*=' drosera.toml \
+#   || echo "address = \"$TRAP_ADDRESS\"" >> drosera.toml
+#     sed -i "s#^address = \".*\"#address = \"$TRAP_ADDRESS\"#" drosera.toml
+# fi
 
 grep -Eq '^[[:space:]]*private_trap[[:space:]]*=' drosera.toml \
   || echo 'private_trap = true' >> drosera.toml
